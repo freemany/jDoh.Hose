@@ -1,7 +1,21 @@
 <html>
 <head><script>
-    class Hose {
+    class Prms {
+        constructor(resolverCallback) {
+            const resolve = (res) => {
+                if (typeof this.cb === 'function') {
+                    this.cb.call(this.cb, res);
+                }
+            }
 
+            resolverCallback.call(resolverCallback, resolve);
+        }
+
+        then(cb) {
+            this.cb = cb;
+        }
+    }
+    class Hose {
         constructor(v) {
             this.initValue = v;
             this._init = true;
@@ -10,7 +24,7 @@
 
         pipe(operation) {
             let resolver = null;
-            const p = new Promise((resolve) => {
+            const p = new Prms((resolve) => {
                 resolver = resolve;
             });
 
@@ -36,7 +50,9 @@
         }
 
         yield(cb) {
-            cb.call(this, this.cal.call(this));
+            this.cal().then((res) => {
+                cb.call(cb, res);
+            });
         }
     }
 </script></head>
@@ -48,43 +64,37 @@
         .pipe((res, resolve) => {
             resolve(res - 2)
         })
-        .yield((resP) => {
-            resP.then((res) => {
-                console.log(res, 9)
-            })
+        .yield((res) => {
+            console.log(res, 9)
         });
 
 
     (new Hose(100)).pipe((res, resolve) => {
         setTimeout(() => {
             resolve(res + 10);
-        }, 1000);
+        }, 100);
     })
         .pipe((res, resolve) => {
             setTimeout(() => {
                 resolve(res - 20);
-            }, 2000);
+            }, 200);
         })
-        .yield((resP) => {
-            resP.then((res) => {
-                console.log(res, 90)
-            })
+        .yield((res) => {
+            console.log(res, 90)
         });
 
     (new Hose(1)).pipe((res, resolve) => {
         setTimeout(() => {
             resolve(res + 10);
-        }, 1000);
+        }, 1);
     })
         .pipe((res, resolve) => {
             // setTimeout(() => {
             resolve(res - 20);
             // }, 20);
         })
-        .yield((resP) => {
-            resP.then((res) => {
-                console.log(res, -9)
-            })
+        .yield((res) => {
+            console.log(res, -9)
         });
 </script>
 </html>

@@ -1,5 +1,20 @@
-class Hose {
+class Prms {
+    constructor(resolverCallback) {
+        const resolve = (res) => {
+            if ('function' === typeof this.cb) {
+                this.cb.call(this.cb, res);
+            }
+        }
 
+        resolverCallback.call(resolverCallback, resolve);
+    }
+
+    then(cb) {
+        this.cb = cb;
+    }
+}
+
+class Hose {
     constructor(v) {
         this.initValue = v;
         this._init = true;
@@ -8,7 +23,7 @@ class Hose {
 
     pipe(operation) {
         let resolver = null;
-        const p = new Promise((resolve) => {
+        const p = new Prms((resolve) => {
             resolver = resolve;
         });
 
@@ -34,7 +49,9 @@ class Hose {
     }
 
     yield(cb) {
-        cb.call(this, this.cal.call(this));
+        this.cal().then((res) => {
+            cb.call(cb, res);
+        });
     }
 }
 

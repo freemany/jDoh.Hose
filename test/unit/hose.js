@@ -25,11 +25,9 @@ describe('Hose', () => {
                 resolve(res - 2);
                 spy.result ++;
              })
-            .yield((resP) => {
-                resP.then((res) => {
-                    expect(res).to.equal(9);
-                    expect(spy.result).to.equal(2);
-                })
+            .yield((res) => {
+                expect(res).to.equal(9);
+                expect(spy.result).to.equal(2);
             });
     });
 
@@ -42,10 +40,8 @@ describe('Hose', () => {
             .pipe((res, resolve) => {
                 resolve(res - 2)
             })
-            .yield((resP) => {
-                resP.then((res) => {
-                    expect(res).not.to.equal(19);
-                })
+            .yield((res) => {
+                expect(res).not.to.equal(19);
             });
     });
 
@@ -62,8 +58,7 @@ describe('Hose', () => {
                     resolve(res - 20);
                 }, 2);
             })
-            .yield(async (resP) => {
-                const res = await resP;
+            .yield((res) => {
                 expect(res).to.equal(20);
             });
     });
@@ -81,8 +76,7 @@ describe('Hose', () => {
                     resolve(res - 20);
                 }, 2);
             })
-            .yield(async (resP) => {
-                const res = await resP;
+            .yield((res) => {
                 expect(res).not.to.equal(900);
             });
     });
