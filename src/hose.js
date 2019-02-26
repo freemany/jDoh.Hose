@@ -23,14 +23,14 @@ class Hose {
 
     pipe(operation) {
         let resolver = null;
-        const p = new Prms((resolve) => {
+        const p = new Promise((resolve) => {
             resolver = resolve;
         });
 
         if (true === this._init) {
             this.cal = () => {
-                operation.call(this, this.initValue, resolver);
-
+                setTimeout(() => {operation.call(this, this.initValue, resolver);}, 0);
+                // operation.call(this, this.initValue, resolver);
                 return p;
             };
             this._init = false;
@@ -38,7 +38,8 @@ class Hose {
             const _cal = this.cal;
             this.cal = () => {
                 _cal.call(this).then((res) => {
-                    operation.call(this, res, resolver);
+                    setTimeout(() => {operation.call(this, res, resolver);}, 0);
+                    // operation.call(this, res, resolver);
                 });
 
                 return p;

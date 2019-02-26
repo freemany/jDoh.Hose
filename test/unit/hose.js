@@ -13,7 +13,7 @@ describe('Hose', () => {
     //
     //     expect(spy.result).to.equal(0);
     // });
-
+    //
     // it('yield', (done) => {
     //     // 10 + 1 - 2  = 9
     //     (new Hose(10))
@@ -34,19 +34,19 @@ describe('Hose', () => {
     //
     it('yield first', (done) => {
         // 10 + 1 - 2  = 9
-        let h = (new Hose(10))
+        (new Hose(10))
             .pipe((res, resolve) => {
                 resolve(res + 1);
-                expect(res).to.equal(10);
-                done()
             }).pipe((res, resolve) => {
                 resolve(res -2 );
             })
             .yield((res) => {
+                expect(res).to.equal(9);
+                done();
             });
     });
-
-    // it('yield first', (done) => {
+    //
+    // it('yield async', (done) => {
     //     // 10 + 1 - 2  = 9
     //     (new Hose(10))
     //         .pipe((res, resolve) => {
@@ -55,13 +55,13 @@ describe('Hose', () => {
     //             }, 0);
     //         }).pipe((res, resolve) => {
     //             resolve(res -2 );
-    //             expect(res).to.equal(11);
-    //             done();
     //         })
     //         .yield((res) => {
+    //             expect(res).to.equal(9);
+    //             done();
     //         });
     // });
-
+    //
     it('async yield', (done) => {
         // 10 * 4 - 20  = 20
         (new Hose(10))
